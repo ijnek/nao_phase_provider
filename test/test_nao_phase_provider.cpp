@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <gtest/gtest.h>
 #include <memory>
 
-#include <gtest/gtest.h>
 #include "rclcpp/rclcpp.hpp"
 #include "nao_phase_provider/nao_phase_provider.hpp"
 
