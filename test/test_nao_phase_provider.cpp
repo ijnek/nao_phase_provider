@@ -36,7 +36,7 @@ protected:
     naoPhaseProvider = std::make_shared<nao_phase_provider::NaoPhaseProvider>();
 
     node = std::make_shared<rclcpp::Node>("test");
-    fsrPub = node->create_publisher<nao_sensor_msgs::msg::FSR>("fsr", 10);
+    fsrPub = node->create_publisher<nao_lola_sensor_msgs::msg::FSR>("fsr", 10);
     phaseSub = node->create_subscription<biped_interfaces::msg::Phase>(
       "phase", 10,
       [this](biped_interfaces::msg::Phase::SharedPtr phase) {
@@ -47,7 +47,7 @@ protected:
   nao_phase_provider::NaoPhaseProvider::SharedPtr naoPhaseProvider;
   rclcpp::Node::SharedPtr node;
 
-  rclcpp::Publisher<nao_sensor_msgs::msg::FSR>::SharedPtr fsrPub;
+  rclcpp::Publisher<nao_lola_sensor_msgs::msg::FSR>::SharedPtr fsrPub;
   rclcpp::Subscription<biped_interfaces::msg::Phase>::SharedPtr phaseSub;
 
   void phaseCallback(const biped_interfaces::msg::Phase::SharedPtr phase);
@@ -56,7 +56,7 @@ protected:
 
 TEST_F(TestNaoPhaseProvider, l_foot_front_left)
 {
-  nao_sensor_msgs::msg::FSR fsr;
+  nao_lola_sensor_msgs::msg::FSR fsr;
   fsr.l_foot_front_left = 10.0;
   fsrPub->publish(fsr);
 
@@ -68,7 +68,7 @@ TEST_F(TestNaoPhaseProvider, l_foot_front_left)
 
 TEST_F(TestNaoPhaseProvider, l_foot_front_right)
 {
-  nao_sensor_msgs::msg::FSR fsr;
+  nao_lola_sensor_msgs::msg::FSR fsr;
   fsr.l_foot_front_right = 10.0;
   fsrPub->publish(fsr);
 
@@ -80,7 +80,7 @@ TEST_F(TestNaoPhaseProvider, l_foot_front_right)
 
 TEST_F(TestNaoPhaseProvider, l_foot_back_left)
 {
-  nao_sensor_msgs::msg::FSR fsr;
+  nao_lola_sensor_msgs::msg::FSR fsr;
   fsr.l_foot_back_left = 10.0;
   fsrPub->publish(fsr);
 
@@ -92,7 +92,7 @@ TEST_F(TestNaoPhaseProvider, l_foot_back_left)
 
 TEST_F(TestNaoPhaseProvider, l_foot_back_right)
 {
-  nao_sensor_msgs::msg::FSR fsr;
+  nao_lola_sensor_msgs::msg::FSR fsr;
   fsr.l_foot_back_right = 10.0;
   fsrPub->publish(fsr);
 
@@ -104,7 +104,7 @@ TEST_F(TestNaoPhaseProvider, l_foot_back_right)
 
 TEST_F(TestNaoPhaseProvider, r_foot_front_left)
 {
-  nao_sensor_msgs::msg::FSR fsr;
+  nao_lola_sensor_msgs::msg::FSR fsr;
   fsr.r_foot_front_left = 10.0;
   fsrPub->publish(fsr);
 
@@ -116,7 +116,7 @@ TEST_F(TestNaoPhaseProvider, r_foot_front_left)
 
 TEST_F(TestNaoPhaseProvider, r_foot_front_right)
 {
-  nao_sensor_msgs::msg::FSR fsr;
+  nao_lola_sensor_msgs::msg::FSR fsr;
   fsr.r_foot_front_right = 10.0;
   fsrPub->publish(fsr);
 
@@ -128,7 +128,7 @@ TEST_F(TestNaoPhaseProvider, r_foot_front_right)
 
 TEST_F(TestNaoPhaseProvider, r_foot_back_left)
 {
-  nao_sensor_msgs::msg::FSR fsr;
+  nao_lola_sensor_msgs::msg::FSR fsr;
   fsr.r_foot_back_left = 10.0;
   fsrPub->publish(fsr);
 
@@ -140,7 +140,7 @@ TEST_F(TestNaoPhaseProvider, r_foot_back_left)
 
 TEST_F(TestNaoPhaseProvider, r_foot_back_right)
 {
-  nao_sensor_msgs::msg::FSR fsr;
+  nao_lola_sensor_msgs::msg::FSR fsr;
   fsr.r_foot_back_right = 10.0;
   fsrPub->publish(fsr);
 

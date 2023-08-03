@@ -7,12 +7,12 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(nao_sensor_msgs REQUIRED)
+find_package(nao_lola_sensor_msgs REQUIRED)
 find_package(biped_interfaces REQUIRED)
 find_package(rclcpp_components REQUIRED)
 
 set(THIS_PACKAGE_INCLUDE_DEPENDS
-  nao_sensor_msgs
+  nao_lola_sensor_msgs
   biped_interfaces
   rclcpp_components)
 

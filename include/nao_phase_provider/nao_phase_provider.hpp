@@ -16,7 +16,7 @@
 #define NAO_PHASE_PROVIDER__NAO_PHASE_PROVIDER_HPP_
 
 #include "rclcpp/node.hpp"
-#include "nao_sensor_msgs/msg/fsr.hpp"
+#include "nao_lola_sensor_msgs/msg/fsr.hpp"
 #include "biped_interfaces/msg/phase.hpp"
 
 namespace nao_phase_provider
@@ -28,10 +28,10 @@ public:
   explicit NaoPhaseProvider(const rclcpp::NodeOptions & options = rclcpp::NodeOptions{});
 
 private:
-  rclcpp::Subscription<nao_sensor_msgs::msg::FSR>::SharedPtr fsrSub;
+  rclcpp::Subscription<nao_lola_sensor_msgs::msg::FSR>::SharedPtr fsrSub;
   rclcpp::Publisher<biped_interfaces::msg::Phase>::SharedPtr phasePub;
 
-  void fsrCallback(const nao_sensor_msgs::msg::FSR::SharedPtr fsr);
+  void fsrCallback(const nao_lola_sensor_msgs::msg::FSR::SharedPtr fsr);
 };
 
 }  // namespace nao_phase_provider
