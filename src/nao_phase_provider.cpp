@@ -24,14 +24,14 @@ NaoPhaseProvider::NaoPhaseProvider(const rclcpp::NodeOptions & options)
 {
   // Create subscription
   fsrSub =
-    create_subscription<nao_sensor_msgs::msg::FSR>(
+    create_subscription<nao_lola_sensor_msgs::msg::FSR>(
     "fsr", 10, std::bind(&NaoPhaseProvider::fsrCallback, this, _1));
 
   // Create publisher
   phasePub = create_publisher<biped_interfaces::msg::Phase>("phase", 10);
 }
 
-void NaoPhaseProvider::fsrCallback(const nao_sensor_msgs::msg::FSR::SharedPtr fsr)
+void NaoPhaseProvider::fsrCallback(const nao_lola_sensor_msgs::msg::FSR::SharedPtr fsr)
 {
   auto sumLeftFoot =
     fsr->l_foot_front_left +
