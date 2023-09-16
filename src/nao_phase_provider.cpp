@@ -29,6 +29,11 @@ NaoPhaseProvider::NaoPhaseProvider(const rclcpp::NodeOptions & options)
 
   // Create publisher
   phasePub = create_publisher<biped_interfaces::msg::Phase>("phase", 10);
+
+  // Create timer
+  timer = create_timer(
+    std::chrono::duration<double>(0.7),
+    std::bind(&NaoPhaseProvider::timerCallback, this));
 }
 
 void NaoPhaseProvider::fsrCallback(const nao_lola_sensor_msgs::msg::FSR::SharedPtr fsr)
@@ -52,7 +57,22 @@ void NaoPhaseProvider::fsrCallback(const nao_lola_sensor_msgs::msg::FSR::SharedP
     phase.phase = phase.RIGHT_STANCE;
   }
 
+  timer.reset();  // Reset timer
   phasePub->publish(phase);
+  lastPhase = phase;
+}
+
+void NaoPhaseProvider::timerCallback()
+{
+  // Change phase
+  if (lastPhase.phase == biped_interfaces::msg::Phase::LEFT_STANCE) {
+    lastPhase.phase = biped_interfaces::msg::Phase::RIGHT_STANCE;
+  } else if (lastPhase.phase == biped_interfaces::msg::Phase::RIGHT_STANCE) {
+    lastPhase.phase = biped_interfaces::msg::Phase::LEFT_STANCE;
+  }
+
+  // Publish phase
+  phasePub->publish(lastPhase);
 }
 
 

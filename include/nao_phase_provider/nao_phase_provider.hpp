@@ -31,7 +31,12 @@ private:
   rclcpp::Subscription<nao_lola_sensor_msgs::msg::FSR>::SharedPtr fsrSub;
   rclcpp::Publisher<biped_interfaces::msg::Phase>::SharedPtr phasePub;
 
+  rclcpp::TimerBase::SharedPtr timer;
+
   void fsrCallback(const nao_lola_sensor_msgs::msg::FSR::SharedPtr fsr);
+  void timerCallback();
+
+  biped_interfaces::msg::Phase lastPhase;
 };
 
 }  // namespace nao_phase_provider
