@@ -15,6 +15,7 @@
 #include "nao_phase_provider/nao_phase_provider.hpp"
 
 using std::placeholders::_1;
+using namespace std::chrono_literals;
 
 namespace nao_phase_provider
 {
@@ -31,9 +32,7 @@ NaoPhaseProvider::NaoPhaseProvider(const rclcpp::NodeOptions & options)
   phasePub = create_publisher<biped_interfaces::msg::Phase>("phase", 10);
 
   // Create timer
-  timer = create_timer(
-    std::chrono::duration<double>(0.7),
-    std::bind(&NaoPhaseProvider::timerCallback, this));
+  timer = create_wall_timer(700ms, std::bind(&NaoPhaseProvider::timerCallback, this));
 }
 
 void NaoPhaseProvider::fsrCallback(const nao_lola_sensor_msgs::msg::FSR::SharedPtr fsr)
@@ -57,9 +56,12 @@ void NaoPhaseProvider::fsrCallback(const nao_lola_sensor_msgs::msg::FSR::SharedP
     phase.phase = phase.RIGHT_STANCE;
   }
 
-  timer.reset();  // Reset timer
-  phasePub->publish(phase);
-  lastPhase = phase;
+  if (lastPhase.phase != phase.phase)
+  {
+    timer.reset();  // Reset timer
+    phasePub->publish(phase);
+    lastPhase = phase;
+  }
 }
 
 void NaoPhaseProvider::timerCallback()
