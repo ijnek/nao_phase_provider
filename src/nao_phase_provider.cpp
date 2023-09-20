@@ -30,9 +30,6 @@ NaoPhaseProvider::NaoPhaseProvider(const rclcpp::NodeOptions & options)
 
   // Create publisher
   phasePub = create_publisher<biped_interfaces::msg::Phase>("phase", 10);
-
-  // Create timer
-  timer = create_wall_timer(700ms, std::bind(&NaoPhaseProvider::timerCallback, this));
 }
 
 void NaoPhaseProvider::fsrCallback(const nao_lola_sensor_msgs::msg::FSR::SharedPtr fsr)
@@ -56,26 +53,27 @@ void NaoPhaseProvider::fsrCallback(const nao_lola_sensor_msgs::msg::FSR::SharedP
     phase.phase = phase.RIGHT_STANCE;
   }
 
+  // Override if necessary
+  if (lastPhaseChangeTime.has_value())
+  {
+    rclcpp::Duration timeSinceLastPhaseChange = now() - lastPhaseChangeTime.value();
+    if (timeSinceLastPhaseChange.seconds() < 0.05 && phase.phase != lastPhase.phase) {
+      // Too short, don't switch phase
+      RCLCPP_DEBUG(get_logger(), "Not switching phase, too short");
+      phase.phase = lastPhase.phase;
+    } else if (timeSinceLastPhaseChange.seconds() > 0.7) {
+      // Too long, switch phase
+      RCLCPP_DEBUG(get_logger(), "Switching phase, too long");
+      phase.phase = (1 - lastPhase.phase);
+    }
+  }
+
   if (lastPhase.phase != phase.phase)
   {
-    timer.reset();  // Reset timer
     phasePub->publish(phase);
     lastPhase = phase;
+    lastPhaseChangeTime = now();
   }
 }
-
-void NaoPhaseProvider::timerCallback()
-{
-  // Change phase
-  if (lastPhase.phase == biped_interfaces::msg::Phase::LEFT_STANCE) {
-    lastPhase.phase = biped_interfaces::msg::Phase::RIGHT_STANCE;
-  } else if (lastPhase.phase == biped_interfaces::msg::Phase::RIGHT_STANCE) {
-    lastPhase.phase = biped_interfaces::msg::Phase::LEFT_STANCE;
-  }
-
-  // Publish phase
-  phasePub->publish(lastPhase);
-}
-
 
 }  // namespace nao_phase_provider

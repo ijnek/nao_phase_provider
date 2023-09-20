@@ -15,6 +15,8 @@
 #ifndef NAO_PHASE_PROVIDER__NAO_PHASE_PROVIDER_HPP_
 #define NAO_PHASE_PROVIDER__NAO_PHASE_PROVIDER_HPP_
 
+#include <optional>
+
 #include "rclcpp/node.hpp"
 #include "nao_lola_sensor_msgs/msg/fsr.hpp"
 #include "biped_interfaces/msg/phase.hpp"
@@ -31,12 +33,10 @@ private:
   rclcpp::Subscription<nao_lola_sensor_msgs::msg::FSR>::SharedPtr fsrSub;
   rclcpp::Publisher<biped_interfaces::msg::Phase>::SharedPtr phasePub;
 
-  rclcpp::TimerBase::SharedPtr timer;
-
   void fsrCallback(const nao_lola_sensor_msgs::msg::FSR::SharedPtr fsr);
-  void timerCallback();
 
   biped_interfaces::msg::Phase lastPhase;
+  std::optional<rclcpp::Time> lastPhaseChangeTime = std::nullopt;
 };
 
 }  // namespace nao_phase_provider
