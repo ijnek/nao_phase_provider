@@ -15,7 +15,6 @@
 #include "nao_phase_provider/nao_phase_provider.hpp"
 
 using std::placeholders::_1;
-using namespace std::chrono_literals;
 
 namespace nao_phase_provider
 {
@@ -57,11 +56,7 @@ void NaoPhaseProvider::fsrCallback(const nao_lola_sensor_msgs::msg::FSR::SharedP
   if (lastPhaseChangeTime.has_value())
   {
     rclcpp::Duration timeSinceLastPhaseChange = now() - lastPhaseChangeTime.value();
-    if (timeSinceLastPhaseChange.seconds() < 0.05 && phase.phase != lastPhase.phase) {
-      // Too short, don't switch phase
-      RCLCPP_DEBUG(get_logger(), "Not switching phase, too short");
-      phase.phase = lastPhase.phase;
-    } else if (timeSinceLastPhaseChange.seconds() > 0.7) {
+    if (timeSinceLastPhaseChange.seconds() > 0.7) {
       // Too long, switch phase
       RCLCPP_DEBUG(get_logger(), "Switching phase, too long");
       phase.phase = (1 - lastPhase.phase);
